@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Content Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .input-section, .output-section { border: 1px solid #ddd; padding: 15px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; }
+        textarea { height: 80px; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        .output-content { min-height: 200px; border: 1px solid #eee; padding: 10px; margin-top: 10px; }
+        .hidden { display: none; }
+        .error { color: red; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Marketing Content Generator</h1>
+    
+    <div class="container">
+        <div class="input-section">
+            <h2>Input Parameters</h2>
+            
+            <div class="form-group">
+                <label for="content-type">Content Type</label>
+                <select id="content-type">
+                    <option value="hashtags">Hashtags</option>
+                    <option value="captions">Social Media Captions</option>
+                    <option value="product-description">Product Description</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-info">Product/Service Info</label>
+                <textarea id="product-info" placeholder="Describe your product..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="target-audience">Target Audience</label>
+                <input type="text" id="target-audience" placeholder="e.g., young professionals">
+            </div>
+            
+            <div class="form-group">
+                <label for="tone">Tone</label>
+                <select id="tone">
+                    <option value="professional">Professional</option>
+                    <option value="casual">Casual</option>
+                    <option value="enthusiastic">Enthusiastic</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="variations">Number of Variations</label>
+                <select id="variations">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            
+            <button id="generate-btn">Generate Content</button>
+            <button id="clear-btn">Clear All</button>
+            
+            <div class="error hidden" id="error-message"></div>
+            <div class="loading hidden" id="loading">Generating content...</div>
+        </div>
+        
+        <div class="output-section">
+            <h2>Generated Content</h2>
+            <div class="output-content" id="output">
+                Content will appear here...
+            </div>
+            <button id="save-btn">Save to File</button>
+            <button id="copy-btn">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const generateBtn = document.getElementById('generate-btn');
+        const saveBtn = document.getElementById('save-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const outputElement = document.getElementById('output');
+        const errorElement = document.getElementById('error-message');
+        const loadingElement = document.getElementById('loading');
+
+        // Generate content
+        generateBtn.addEventListener('click', async () => {
+            const contentType = document.getElementById('content-type').value;
+            const productInfo = document.getElementById('product-info').value;
+            
+            if (!productInfo.trim()) {
+                showError('Please provide product information');
+                return;
+            }
+
+            showLoading();
+            hideError();
+
+            try {
+                const content = await generateContent({
+                    contentType,
+                    productInfo,
+                    targetAudience: document.getElementById('target-audience').value,
+                    tone: document.getElementById('tone').value,
+                    variations: document.getElementById('variations').value
+                });
+                
+                outputElement.textContent = content;
+            } catch (error) {
+                showError('Failed to generate content: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        });
+
+
+        // Clear all
+        clearBtn.addEventListener('click', () => {
+            document.getElementById('product-info').value = '';
+            document.getElementById('target-audience').value = '';
+            outputElement.textContent = 'Content will appear here...';
+            hideError();
+        });
+
+        // Content generation function
+        async function generateContent(params) {
+            // Replace this part with the actual API
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    let content = '';
+                    
+                    switch(params.contentType) {
+                        case 'hashtags':
+                            content = generateHashtags(params);
+                            break;
+                        case 'captions':
+                            content = generateCaptions(params);
+                            break;
+                        case 'product-description':
+                            content = generateProductDescription(params);
+                            break;
+                    }
+                    
+                    resolve(content);
+                }, 1000);
+            });
+        }
+
+        // Content generators
+        function generateHashtags(params) {
+            const base = ['#amazing', '#innovative', '#musthave'];
+            const product = params.productInfo.toLowerCase().includes('tech') ? 
+                ['#tech', '#innovation'] : ['#lifestyle', '#quality'];
+            
+            return `Generated ${params.variations} hashtag sets:\n\n` +
+                   `Set 1: ${[...base, ...product].join(' ')}\n` +
+                   `Set 2: ${[...product, '#trending', '#popular'].join(' ')}\n` +
+                   `Tone: ${params.tone}`;
+        }
+
+        function generateCaptions(params) {
+            return `Generated ${params.variations} captions:\n\n` +
+                   `1. "Check out our ${params.productInfo}! Perfect for ${params.targetAudience}."\n` +
+                   `2. "We're excited to share our ${params.productInfo} with you!"\n` +
+                   `3. "Discover the benefits of our ${params.productInfo} today."\n` +
+                   `Tone: ${params.tone}`;
+        }
+
+        function generateProductDescription(params) {
+            return `Product Description:\n\n` +
+                   `Our ${params.productInfo} is designed for ${params.targetAudience}. ` +
+                   `It offers exceptional quality and performance that will exceed your expectations.\n\n` +
+                   `Key Features:\n` +
+                   `• High-quality materials\n` +
+                   `• User-friendly design\n` +
+                   `• Excellent value\n` +
+                   `Tone: ${params.tone}`;
+        }
+
+        // UI helpers
+        function showError(message) {
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+        }
+
+        function hideError() {
+            errorElement.classList.add('hidden');
+        }
+
+        function showLoading() {
+            loadingElement.classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            loadingElement.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
