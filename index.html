@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Content Generator</title>
+</head>
+<body>
+    <h1>Genie</h1>
+    
+    <div class="container">
+        <div class="input-section">
+            <h2>Input Parameters</h2>
+            
+            <div class="form-group">
+                <label for="content-type">Content Type</label>
+                <select id="content-type">
+                    <option value="hashtags">Hashtags</option>
+                    <option value="captions">Social Media Captions</option>
+                    <option value="product-description">Product Description</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="product-info">Product/Service Info</label>
+                <textarea id="product-info"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="target-audience">Target Audience</label>
+                <input type="text" id="target-audience">
+            </div>
+            
+            <div class="form-group">
+                <label for="tone">Tone</label>
+                <select id="tone">
+                    <option value="professional">Professional</option>
+                    <option value="casual">Casual</option>
+                    <option value="enthusiastic">Enthusiastic</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="variations">Number of Variations</label>
+                <select id="variations">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            
+            <button id="generate-btn">Generate Content</button>
+            <button id="clear-btn">Clear All</button>
+            
+            <div id="error-message"></div>
+            <div id="loading"></div>
+        </div>
+        
+        <div class="output-section">
+            <h2>Generated Content</h2>
+            <div id="output"></div>
+            <button id="save-btn">Save to File</button>
+            <button id="copy-btn">Copy to Clipboard</button>
+        </div>
+    </div>
+</body>
+</html>
